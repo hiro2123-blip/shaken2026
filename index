@@ -53,7 +53,7 @@
         </div>
     </div>
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycby1B7Vmv3YOvOAJDTCJEgOBYpKwhCnHh4w61MLP8NVA1Fc9hRf8yHbmZ3c39ztqE977/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwHwRaPY32J8U2XpdXWOFIy6fbu4SMHFBMPGLYJbsl3YcQyk9iXHeaRacLdy74oXuL3/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
