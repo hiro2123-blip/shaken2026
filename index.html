@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>車検予約システム２０２６</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: sans-serif; font-weight: bold; }
+        .selected-day { background-color: #3b82f6 !important; color: white !important; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen p-2 text-[10px]">
+    <div id="app" class="bg-white rounded-2xl shadow-xl p-4 max-w-4xl mx-auto font-bold">
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
+            <h1 class="text-base" onclick="location.reload()">🏪 車検予約システム２０２６</h1>
+            <div class="flex space-x-2">
+                <button onclick="showSection('course-section')" class="px-3 py-1 bg-gray-200 rounded">新規</button>
+                <button onclick="checkAdmin()" class="px-3 py-1 bg-gray-200 rounded">管理</button>
+            </div>
+        </div>
+
+        <div id="main-content">
+            <div id="course-section" class="view-section text-center py-10">
+                <div id="loading" class="mb-4 text-blue-500 animate-pulse">データを読み込み中...</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="selectCourse('スタンダード車検')" class="border-2 p-8 rounded-2xl hover:border-blue-500 bg-white shadow-sm transition font-bold text-sm">⏱️ スタンダード</button>
+                    <button onclick="selectCourse('セーフティ車検')" class="border-2 p-8 rounded-2xl hover:border-orange-500 bg-white shadow-sm transition font-bold text-sm">🛡️ セーフティ</button>
+                    <button onclick="selectCourse('一般整備')" class="border-2 p-8 rounded-2xl hover:border-green-500 bg-white shadow-sm transition font-bold text-sm">🔧 一般整備</button>
+                </div>
+            </div>
+
+            <div id="form-section" class="view-section hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="border rounded-xl p-3 bg-white shadow-inner">
+                            <div class="flex justify-between items-center mb-2 bg-slate-800 text-white p-1 rounded font-bold">
+                                <button onclick="moveMonth(-1)">＜</button><span id="cal-month"></span><button onclick="moveMonth(1)">＞</button>
+                            </div>
+                            <div id="cal-grid" class="grid grid-cols-7 gap-1 text-center font-bold"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="border p-2 rounded bg-white"><button onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-2 rounded text-[8px] font-bold">受付表</button><input type="file" id="f1" class="hidden" onchange="imgP(this,1)"><img id="i1" class="mt-2 mx-auto max-h-12 hidden"></div>
+                            <div class="border p-2 rounded bg-white"><button onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-2 rounded text-[8px] font-bold">車検証</button><input type="file" id="f2" class="hidden" onchange="imgP(this,2)"><img id="i2" class="mt-2 mx-auto max-h-12 hidden"></div>
+                            <div class="border p-2 rounded bg-white"><button onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-2 rounded text-[8px] font-bold">自賠責</button><input type="file" id="f3" class="hidden" onchange="imgP(this,3)"><img id="i3" class="mt-2 mx-auto max-h-12 hidden"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <select id="ss" class="w-full border p-3 rounded-xl font-bold"><option value="">店舗を選択</option><option value="板橋ss">板橋ss</option><option value="志村ss">志村ss</option><option value="小茂根ss">小茂根ss</option><option value="赤羽西ss">赤羽西ss</option><option value="東坂下ss">東坂下ss</option><option value="高島平ss">高島平ss</option><option value="武蔵関ss">武蔵関ss</option><option value="車検課">車検課</option></select>
+                        <input type="text" id="name" class="w-full border p-3 rounded-xl font-bold" placeholder="お客様名">
+                        <input type="text" id="num" class="w-full border p-3 rounded-xl font-bold" placeholder="車番ナンバー">
+                        <input type="text" id="memo" class="w-full border p-3 rounded-xl font-bold" placeholder="備考">
+                        <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100 font-bold leading-relaxed">
+                            <p id="disp-course" class="text-blue-900 border-b border-blue-200 pb-1 mb-1"></p>
+                            <p id="row-s">車検日：<span id="date-s" class="text-blue-600 font-bold">未選択</span></p>
+                            <p id="row-a">入庫日：<span id="date-a" class="text-orange-600 font-bold">未選択</span></p>
+                        </div>
+                        <button id="sb-btn" onclick="sendData()" class="w-full bg-blue-600 text-white py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition font-bold text-sm">予約を確定して送信</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-section" class="view-section hidden font-bold">
+                <div class="overflow-x-auto"><table class="w-full border text-center font-bold text-[8px]"><thead class="bg-slate-700 text-white"><tr><th class="p-2">予約日</th><th class="p-2">店舗</th><th class="p-2">名前</th></tr></thead><tbody id="list-body" class="divide-y"></tbody></table></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwkI92MgJJgE6uw8gDOnuXzdfiV0dTUXTSU6YWQyTAFNCEeQJ3pBqt9_j7ZNgmqpKfv/exec"; 
+        const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
+        let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:""};
+
+        function imgP(input, n) {
+            if (input.files && input.files[0]) {
+                const r = new FileReader();
+                r.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height, max = 800;
+                        if (w > h && w > max) { h *= max/w; w = max; } else if (h > max) { w *= max/h; h = max; }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        pics[n] = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById(`i${n}`).src = pics[n];
+                        document.getElementById(`i${n}`).classList.remove('hidden');
+                    };
+                    img.src = e.target.result;
+                };
+                r.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function selectCourse(n) { curC = n; document.getElementById('disp-course').innerText = n; document.getElementById('row-s').classList.toggle('hidden', n==='一般整備'); document.getElementById('row-a').classList.toggle('hidden', n==='スタンダード車検'); renderCal(); showSection('form-section'); }
+        function renderCal() {
+            const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
+            const y = vD.getFullYear(), m = vD.getMonth();
+            document.getElementById('cal-month').innerText = `${y}年 ${m+1}月`;
+            ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 font-bold">${d}</div>`));
+            const f = new Date(y, m, 1).getDay(), l = new Date(y, m+1, 0).getDate();
+            for(let i=0; i<f; i++) grid.appendChild(document.createElement('div'));
+            for(let i=1; i<=l; i++) {
+                const k = `${y}/${m+1}/${i}`, dO = new Date(y, m, i);
+                const isH = dO.getDay()===0 || dO.getDay()===6 || HOLS.includes(k);
+                const div = document.createElement('div');
+                div.className = `p-1 border rounded h-10 flex items-center justify-center font-bold ${isH?'bg-red-50 text-red-300':'hover:bg-blue-50 cursor-pointer'}`;
+                div.innerHTML = i;
+                div.onclick = () => { if(isH) return; document.querySelectorAll('#cal-grid div').forEach(d => d.classList.remove('selected-day')); div.classList.add('selected-day'); if (curC==='一般整備') { selA = k; selS = ""; } else { selS = k; selA = (curC==='セーフティ車検') ? getPrevBiz(k) : ""; } document.getElementById('date-s').innerText = selS || '-'; document.getElementById('date-a').innerText = selA || '-'; };
+                grid.appendChild(div);
+            }
+        }
+        function getPrevBiz(ds) { let d = new Date(ds); do { d.setDate(d.getDate()-1); } while (d.getDay()===0||d.getDay()===6||HOLS.includes(`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`)); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
+        async function sendData() { 
+            const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true;
+            const data = { shakenDate: selS, arrivalDate: selA, ss: document.getElementById('ss').value, course: curC, name: document.getElementById('name').value, carNum: document.getElementById('num').value, memo: document.getElementById('memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3] }; 
+            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('予約を送信しました'); location.reload(); } catch(e) { alert('通信エラー'); btn.disabled = false; btn.innerText = "確定して送信"; } 
+        }
+        function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function moveMonth(d) { vD.setMonth(vD.getMonth() + d); renderCal(); }
+        function checkAdmin() { if (prompt("パスワードを入力") === "ss1234") { showSection('admin-section'); fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => { const b = document.getElementById('list-body'); b.innerHTML = ''; data.forEach(r => { b.insertAdjacentHTML('beforeend', `<tr><td class="p-2">${r.shakenDate || r.arrivalDate}</td><td class="p-2">${r.ss}</td><td class="p-2">${r.name}</td></tr>`); }); }); } }
+        window.onload = () => { fetch(GAS_URL + "?action=getData").then(() => document.getElementById('loading').classList.add('hidden')).catch(() => document.getElementById('loading').classList.add('hidden')); };
+    </script>
+</body>
+</html>
