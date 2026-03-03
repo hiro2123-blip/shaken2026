@@ -8,10 +8,11 @@
         body { font-family: sans-serif; font-weight: bold; overflow-x: hidden; }
         .selected-day { background-color: #3b82f6 !important; color: white !important; }
         .disabled-day { color: #e2e8f0 !important; cursor: not-allowed !important; background-color: #f8fafc; }
-        .attached-btn { background-color: #22c55e !important; color: white !important; } /* 緑色に変更 */
+        .attached-btn { background-color: #22c55e !important; color: white !important; }
+        .admin-table th, .admin-table td { border: 1px solid #e2e8f0; padding: 8px; }
     </style>
 </head>
-<body class="bg-slate-100 p-2 md:p-4 text-base">
+<body class="bg-slate-100 p-2 md:p-4">
     <div id="app" class="bg-white rounded-3xl shadow-xl p-4 md:p-6 max-w-7xl mx-auto border-2 border-blue-50">
         <div class="flex justify-between items-center mb-4 border-b-2 pb-2">
             <h1 class="text-xl md:text-3xl text-blue-800 font-black" onclick="location.reload()">🏪 車検予約システム２０２６</h1>
@@ -33,24 +34,24 @@
             <div id="form-section" class="view-section hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-4">
-                        <div class="border-2 rounded-2xl p-2 bg-white shadow-inner">
-                            <div class="flex justify-between items-center mb-2 bg-slate-800 text-white p-3 rounded-xl text-2xl font-bold">
+                        <div class="border-2 rounded-2xl p-2 bg-white shadow-inner text-2xl font-bold">
+                            <div class="flex justify-between items-center mb-2 bg-slate-800 text-white p-3 rounded-xl">
                                 <button onclick="moveMonth(-1)">＜</button><span id="cal-m"></span><button onclick="moveMonth(1)">＞</button>
                             </div>
-                            <div id="cal-grid" class="grid grid-cols-7 gap-1 text-center text-xl"></div>
+                            <div id="cal-grid" class="grid grid-cols-7 gap-1 text-center"></div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
                             <div class="border-2 p-2 rounded-xl bg-white text-center">
-                                <button id="btn-f1" onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">受付表 添付</button>
-                                <input type="file" id="f1" class="hidden" accept="image/*" onchange="imgP(this,1)">
+                                <button id="btn-f1" onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">受付表<br>(写真/PDF)</button>
+                                <input type="file" id="f1" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,1)">
                             </div>
                             <div class="border-2 p-2 rounded-xl bg-white text-center">
-                                <button id="btn-f2" onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">車検証 添付</button>
-                                <input type="file" id="f2" class="hidden" accept="image/*" onchange="imgP(this,2)">
+                                <button id="btn-f2" onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">車検証<br>(写真/PDF)</button>
+                                <input type="file" id="f2" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,2)">
                             </div>
                             <div class="border-2 p-2 rounded-xl bg-white text-center">
-                                <button id="btn-f3" onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">自賠責 添付</button>
-                                <input type="file" id="f3" class="hidden" accept="image/*" onchange="imgP(this,3)">
+                                <button id="btn-f3" onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">自賠責<br>(写真/PDF)</button>
+                                <input type="file" id="f3" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,3)">
                             </div>
                         </div>
                     </div>
@@ -77,8 +78,8 @@
                     <h2 class="text-3xl text-center mb-8 font-black text-blue-800">予約内容の最終確認</h2>
                     <div id="confirm-data" class="space-y-4 text-2xl mb-10 leading-relaxed"></div>
                     <div class="grid grid-cols-2 gap-6">
-                        <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-[30px] text-2xl font-black">修正する</button>
-                        <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-[30px] text-2xl font-black">このまま送信</button>
+                        <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-[30px] text-2xl font-black shadow-lg">修正する</button>
+                        <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-[30px] text-2xl font-black shadow-lg">このまま送信</button>
                     </div>
                 </div>
             </div>
@@ -88,43 +89,56 @@
                     <button onclick="switchAdminTab('shaken')" id="tab-s" class="text-2xl px-4 border-b-8 border-blue-500 text-blue-600">車検一覧</button>
                     <button onclick="switchAdminTab('factory')" id="tab-f" class="text-2xl px-4 text-gray-400">工場一覧</button>
                 </div>
-                <div id="area-s" class="overflow-x-auto"><table class="w-full border-2 text-left text-lg"><thead class="bg-blue-50"><tr><th class="p-3 border">車検日</th><th class="p-3 border">コース名</th><th class="p-3 border">店舗名</th><th class="p-3 border">お客様名</th><th class="p-3 border">車種</th><th class="p-3 border">ナンバー</th><th class="p-3 border">備考</th></tr></thead><tbody id="list-s" class="divide-y-2"></tbody></table></div>
-                <div id="area-f" class="hidden overflow-x-auto"><table class="w-full border-2 text-left text-lg"><thead class="bg-orange-50"><tr><th class="p-3 border text-orange-700">工場入庫日</th><th class="p-3 border">車検日</th><th class="p-3 border text-blue-700">コース名</th><th class="p-3 border">店舗名</th><th class="p-3 border">お客様名</th><th class="p-3 border">車種</th><th class="p-3 border">ナンバー</th><th class="p-3 border">備考</th></tr></thead><tbody id="list-f" class="divide-y-2"></tbody></table></div>
+                <div id="area-s" class="overflow-x-auto">
+                    <table class="w-full admin-table text-left text-lg">
+                        <thead class="bg-blue-50"><tr><th>車検日</th><th>コース名</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>備考</th><th>書類</th></tr></thead>
+                        <tbody id="list-s" class="divide-y-2"></tbody>
+                    </table>
+                </div>
+                <div id="area-f" class="hidden overflow-x-auto">
+                    <table class="w-full admin-table text-left text-lg">
+                        <thead class="bg-orange-50"><tr><th class="text-orange-700">工場入庫日</th><th>車検日</th><th class="text-blue-700">コース名</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>備考</th><th>書類</th></tr></thead>
+                        <tbody id="list-f" class="divide-y-2"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbwaaxTGdE5QC7EULwfcX93Hv6AG_zjWsibbdFcHwkF8ERvHrbmTTMwWH4M_4oYlhZqk/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyM4t99fsKY_JgjeqHH8WutpNEkKzqwHBmn_1zOGvNFo9h0LOHDnxzIMKPMPS4yk0Rf/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
         function handleStoreChange(val) {
-            if (val === "車検課") { if (prompt("車検課専用パスワード") !== "ss1234") { alert("パスワードエラー"); document.getElementById('sel-ss').value = ""; return; } }
+            if (val === "車検課") { if (prompt("車検課専用パスワード") !== "ss1234") { alert("不正なパスワード"); document.getElementById('sel-ss').value = ""; return; } }
             renderCal();
         }
 
         function imgP(input, n) {
             if (input.files && input.files[0]) {
+                const file = input.files[0];
                 const r = new FileReader();
-                r.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height, max = 1000; // 解像度を少しアップ
-                        if (w > h && w > max) { h *= max/w; w = max; } else if (h > max) { w *= max/h; h = max; }
-                        canvas.width = w; canvas.height = h;
-                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        pics[n] = canvas.toDataURL('image/jpeg', 0.8);
-                        
-                        // 【修正点】ボタンの見た目を変える
-                        const btn = document.getElementById(`btn-f${n}`);
-                        btn.innerText = "✅ 添付済";
-                        btn.classList.add('attached-btn');
+                const btn = document.getElementById(`btn-f${n}`);
+                if (file.type === "application/pdf") {
+                    r.onload = (e) => { pics[n] = e.target.result; btn.innerText = "✅ PDF添付済"; btn.classList.add('attached-btn'); };
+                    r.readAsDataURL(file);
+                } else {
+                    r.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let w = img.width, h = img.height, max = 1000;
+                            if (w > h && w > max) { h *= max/w; w = max; } else if (h > max) { w *= max/h; h = max; }
+                            canvas.width = w; canvas.height = h;
+                            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                            pics[n] = canvas.toDataURL('image/jpeg', 0.8);
+                            btn.innerText = "✅ 添付済"; btn.classList.add('attached-btn');
+                        };
+                        img.src = e.target.result;
                     };
-                    img.src = e.target.result;
-                };
-                r.readAsDataURL(input.files[0]);
+                    r.readAsDataURL(file);
+                }
             }
         }
 
@@ -133,33 +147,20 @@
         function renderCal() {
             const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
             const y = vD.getFullYear(), m = vD.getMonth(), ss = document.getElementById('sel-ss').value;
-            const limitDate = new Date(); limitDate.setHours(0,0,0,0);
-            limitDate.setDate(limitDate.getDate() + 3);
-
+            const limit = new Date(); limit.setHours(0,0,0,0); limit.setDate(limit.getDate() + 3);
             document.getElementById('cal-m').innerText = `${y}年 ${m+1}月`;
-            ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 font-bold mb-1">${d}</div>`));
+            ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 mb-1">${d}</div>`));
             const f = new Date(y, m, 1).getDay(), l = new Date(y, m+1, 0).getDate();
             for(let i=0; i<f; i++) grid.appendChild(document.createElement('div'));
             for(let i=1; i<=l; i++) {
-                const target = new Date(y, m, i);
-                const k = `${y}/${m+1}/${i}`;
+                const target = new Date(y, m, i), k = `${y}/${m+1}/${i}`;
                 const isH = target.getDay()===0 || target.getDay()===6 || HOLS.includes(k);
-                const isPast = (target < limitDate);
-                const isLocked = (ss !== "車検課") && (isPast || isH);
-
+                const isLocked = (ss !== "車検課") && (target < limit || isH);
                 const div = document.createElement('div');
                 div.className = `p-4 border rounded-xl flex items-center justify-center font-black ${isLocked?'disabled-day text-slate-300':'hover:bg-blue-100 cursor-pointer'}`;
                 if (isH && ss !== "車検課") div.classList.add('text-red-300');
                 div.innerHTML = i;
-                div.onclick = () => { 
-                    if(isLocked) return; 
-                    document.querySelectorAll('#cal-grid div').forEach(d => d.classList.remove('selected-day')); 
-                    div.classList.add('selected-day'); 
-                    if (curC==='一般整備・修理') { selA = k; selS = ""; } 
-                    else { selS = k; selA = (curC==='セーフティ車検') ? getPrevBiz(k) : ""; } 
-                    document.getElementById('date-s').innerText = selS || '-'; 
-                    document.getElementById('date-a').innerText = selA || '-'; 
-                };
+                div.onclick = () => { if(isLocked) return; document.querySelectorAll('#cal-grid div').forEach(d => d.classList.remove('selected-day')); div.classList.add('selected-day'); if (curC==='一般整備・修理') { selA = k; selS = ""; } else { selS = k; selA = (curC==='セーフティ車検') ? getPrevBiz(k) : ""; } document.getElementById('date-s').innerText = selS || '-'; document.getElementById('date-a').innerText = selA || '-'; };
                 grid.appendChild(div);
             }
         }
@@ -167,59 +168,35 @@
         function getPrevBiz(ds) { let d = new Date(ds); do { d.setDate(d.getDate()-1); } while (d.getDay()===0||d.getDay()===6||HOLS.includes(`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`)); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
         
         function openConfirm() {
-            const ss = document.getElementById('sel-ss').value;
-            const name = document.getElementById('u-name').value;
-            if(!ss || !name || (!selS && !selA)) { alert("店舗、お名前、日付を選択してください"); return; }
-            
-            // 添付状況の確認
-            const p1 = pics[1] ? "✅ あり" : "❌ なし";
-            const p2 = pics[2] ? "✅ あり" : "❌ なし";
-            const p3 = pics[3] ? "✅ あり" : "❌ なし";
-
-            const html = `
-                <p>【コース】 ${curC}</p>
-                <p>【店舗】 ${ss}</p>
-                <p>【お客様】 ${name} 様</p>
-                <p>【車種】 ${document.getElementById('u-model').value || "-"}</p>
-                <p>【ナンバー】 ${document.getElementById('u-num').value || "-"}</p>
-                <p class="text-blue-600">【車検予定】 ${selS||'-'}</p>
-                <p class="text-orange-600">【工場入庫】 ${selA||'-'}</p>
-                <hr class="my-4 border-2">
-                <p class="text-sm text-gray-600">写真添付：</p>
-                <p class="text-sm">受付表:${p1} / 車検証:${p2} / 自賠責:${p3}</p>
-            `;
-            document.getElementById('confirm-data').innerHTML = html;
+            const ss = document.getElementById('sel-ss').value, name = document.getElementById('u-name').value;
+            if(!ss || !name || (!selS && !selA)) { alert("入力不足です"); return; }
+            const p1 = pics[1]?"✅":"❌", p2 = pics[2]?"✅":"❌", p3 = pics[3]?"✅":"❌";
+            document.getElementById('confirm-data').innerHTML = `<p>【コース】 ${curC}</p><p>【店舗】 ${ss}</p><p>【お客様】 ${name} 様</p><p>【車種】 ${document.getElementById('u-model').value || "-"}</p><p>【ナンバー】 ${document.getElementById('u-num').value || "-"}</p><p class="text-blue-600">【車検日】 ${selS||'-'}</p><p class="text-orange-600">【入庫日】 ${selA||'-'}</p><hr class="my-2"><p class="text-sm">添付状況: 受付(${p1}) / 車証(${p2}) / 自賠(${p3})</p>`;
             showSection('confirm-section');
         }
 
-        async function send() { 
-            const btn = document.getElementById('sb-btn'); 
-            btn.innerText = "送信中...（写真をアップロード中）"; 
-            btn.disabled = true;
-            
-            const data = { 
-                shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, 
-                course: curC, name: document.getElementById('u-name').value, 
-                carModel: document.getElementById('u-model').value, 
-                carNum: document.getElementById('u-num').value, 
-                memo: document.getElementById('u-memo').value, 
-                photo1: pics[1], photo2: pics[2], photo3: pics[3] 
-            }; 
-
-            try { 
-                const response = await fetch(GAS_URL, {method:"POST", body:JSON.stringify(data)}); 
-                alert('送信が完了しました。スプレッドシートをご確認ください。'); 
-                location.reload(); 
-            } catch(e) { 
-                alert('送信エラーが発生しました。インターネット接続を確認してください。'); 
-                btn.disabled = false; btn.innerText = "このまま送信"; 
-            } 
-        }
-
+        async function send() { const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true; const data = { shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, course: curC, name: document.getElementById('u-name').value, carModel: document.getElementById('u-model').value, carNum: document.getElementById('u-num').value, memo: document.getElementById('u-memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3] }; try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('予約を完了しました。'); location.reload(); } catch(e) { alert('通信エラー'); btn.disabled = false; btn.innerText = "このまま送信"; } }
+        
         function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
         function moveMonth(d) { vD.setMonth(vD.getMonth() + d); renderCal(); }
         function switchAdminTab(type) { document.getElementById('area-s').classList.toggle('hidden', type==='factory'); document.getElementById('area-f').classList.toggle('hidden', type==='shaken'); document.getElementById('tab-s').className = type==='shaken' ? "text-2xl px-4 border-b-8 border-blue-500 text-blue-600" : "text-2xl px-4 text-gray-400"; document.getElementById('tab-f').className = type==='factory' ? "text-2xl px-4 border-b-8 border-slate-700 text-slate-800" : "text-2xl px-4 text-gray-400"; }
-        function checkAdmin(pw) { if (prompt("管理者PW") === pw) { showSection('admin-section'); fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => { const bs = document.getElementById('list-s'), bf = document.getElementById('list-f'); bs.innerHTML = bf.innerHTML = ''; data.forEach(r => { bs.insertAdjacentHTML('beforeend', `<tr><td class="p-3 border font-bold text-blue-800">${r.shakenDate}</td><td class="p-3 border">${r.course}</td><td class="p-3 border">${r.ss}</td><td class="p-3 border font-bold">${r.name}</td><td class="p-3 border">${r.carModel}</td><td class="p-3 border">${r.carNum}</td><td class="p-3 border text-sm">${r.memo}</td></tr>`); if (r.course !== 'スタンダード車検') { bf.insertAdjacentHTML('beforeend', `<tr><td class="p-3 border font-bold text-orange-700">${r.arrivalDate}</td><td class="p-3 border text-gray-400">${r.shakenDate}</td><td class="p-3 border font-bold text-blue-800">${r.course}</td><td class="p-3 border">${r.ss}</td><td class="p-3 border font-bold">${r.name}</td><td class="p-3 border">${r.carModel}</td><td class="p-3 border">${r.carNum}</td><td class="p-3 border text-sm">${r.memo}</td></tr>`); } }); }); } }
+        
+        function checkAdmin(pw) {
+            if (prompt("管理者PW") === pw) {
+                showSection('admin-section');
+                fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => {
+                    const bs = document.getElementById('list-s'), bf = document.getElementById('list-f');
+                    bs.innerHTML = bf.innerHTML = '';
+                    data.forEach(r => {
+                        const links = `<div class="flex flex-col text-[8px] gap-1">${r.url1.startsWith('http')?`<a href="${r.url1}" target="_blank" class="text-blue-500 underline">受付表</a>`:""}${r.url2.startsWith('http')?`<a href="${r.url2}" target="_blank" class="text-blue-500 underline">車検証</a>`:""}${r.url3.startsWith('http')?`<a href="${r.url3}" target="_blank" class="text-blue-500 underline">自賠責</a>`:""}</div>`;
+                        bs.insertAdjacentHTML('beforeend', `<tr><td>${r.shakenDate}</td><td>${r.course}</td><td>${r.ss}</td><td class="font-bold">${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td class="text-sm">${r.memo}</td><td>${links}</td></tr>`);
+                        if (r.course !== 'スタンダード車検') {
+                            bf.insertAdjacentHTML('beforeend', `<tr><td class="text-orange-700">${r.arrivalDate}</td><td class="text-gray-400">${r.shakenDate}</td><td class="text-blue-800">${r.course}</td><td>${r.ss}</td><td class="font-bold">${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td class="text-sm">${r.memo}</td><td>${links}</td></tr>`);
+                        }
+                    });
+                });
+            }
+        }
     </script>
 </body>
 </html>
