@@ -5,14 +5,14 @@
     <title>車検予約システム２０２６</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: sans-serif; font-weight: bold; }
+        body { font-family: sans-serif; font-weight: bold; overflow-x: hidden; }
         .selected-day { background-color: #3b82f6 !important; color: white !important; }
         .disabled-day { color: #e2e8f0 !important; cursor: not-allowed !important; background-color: #f8fafc; }
         .attached-btn { background-color: #22c55e !important; color: white !important; }
         .admin-table th, .admin-table td { border: 1px solid #e2e8f0; padding: 4px; font-size: 11px; white-space: nowrap; }
     </style>
 </head>
-<body class="bg-slate-100 p-2 md:p-4">
+<body class="bg-slate-100 p-2 md:p-4 text-base">
     <div id="app" class="bg-white rounded-3xl shadow-xl p-4 md:p-6 max-w-7xl mx-auto border-2 border-blue-50">
         <div class="flex justify-between items-center mb-4 border-b-2 pb-2">
             <h1 class="text-xl md:text-3xl text-blue-800 font-black" onclick="location.reload()">🏪 車検予約システム２０２６</h1>
@@ -25,9 +25,9 @@
         <div id="main-content">
             <div id="course-section" class="view-section py-4">
                 <div class="grid grid-cols-3 gap-3">
-                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-blue-50 text-lg md:text-2xl font-black transition-all">⏱️<br>スタンダード車検</button>
-                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-orange-50 text-lg md:text-2xl font-black transition-all">🛡️<br>セーフティ車検</button>
-                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-green-50 text-lg md:text-2xl font-black transition-all">🔧<br>一般整備・修理</button>
+                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-blue-50 text-lg md:text-2xl font-black">⏱️<br>スタンダード車検</button>
+                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-orange-50 text-lg md:text-2xl font-black">🛡️<br>セーフティ車検</button>
+                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-200 p-6 rounded-3xl bg-white shadow-lg hover:bg-green-50 text-lg md:text-2xl font-black">🔧<br>一般整備・修理</button>
                 </div>
             </div>
 
@@ -40,10 +40,10 @@
                             </div>
                             <div id="cal-grid" class="grid grid-cols-7 gap-1 text-center text-xl"></div>
                         </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button id="btn-f1" onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm">受付表 添付</button><input type="file" id="f1" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,1)"></div>
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button id="btn-f2" onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm">車検証 添付</button><input type="file" id="f2" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,2)"></div>
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button id="btn-f3" onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm">自賠責 添付</button><input type="file" id="f3" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,3)"></div>
+                        <div class="grid grid-cols-3 gap-2 text-center font-bold">
+                            <div class="border-2 p-2 rounded-xl bg-white"><button id="btn-f1" onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-4 rounded-lg text-sm">受付表 添付</button><input type="file" id="f1" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,1)"></div>
+                            <div class="border-2 p-2 rounded-xl bg-white"><button id="btn-f2" onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-4 rounded-lg text-sm">車検証 添付</button><input type="file" id="f2" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,2)"></div>
+                            <div class="border-2 p-2 rounded-xl bg-white"><button id="btn-f3" onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-4 rounded-lg text-sm">自賠責 添付</button><input type="file" id="f3" class="hidden" accept="image/*,application/pdf" onchange="imgP(this,3)"></div>
                         </div>
                     </div>
                     <div class="space-y-3">
@@ -54,10 +54,10 @@
                             <input type="text" id="u-num" class="border-4 p-4 rounded-2xl text-2xl font-black" placeholder="ナンバー">
                         </div>
                         <input type="text" id="u-memo" class="w-full border-4 p-4 rounded-2xl text-2xl font-black" placeholder="備考・作業内容">
-                        <div class="p-6 bg-blue-50 rounded-[30px] border-4 border-blue-100 text-2xl">
+                        <div class="p-6 bg-blue-50 rounded-[30px] border-4 border-blue-100 text-2xl leading-loose">
                             <p id="disp-c" class="text-blue-900 border-b-4 border-blue-200 mb-2 font-black"></p>
-                            <p id="row-s">🗓️ 車検日：<span id="date-s" class="text-blue-600 font-black">未選択</span></p>
-                            <p id="row-a">🗓️ 入庫日：<span id="date-a" class="text-orange-600 font-black">未選択</span></p>
+                            <p id="row-s">🗓️ 車検：<span id="date-s" class="text-blue-600 font-black">未選択</span></p>
+                            <p id="row-a">🗓️ 入庫：<span id="date-a" class="text-orange-600 font-black">未選択</span></p>
                         </div>
                         <button onclick="openConfirm()" class="w-full bg-blue-600 text-white py-6 rounded-[30px] text-3xl shadow-2xl hover:bg-blue-700 transition font-black">予約内容を確認する</button>
                     </div>
@@ -67,10 +67,10 @@
             <div id="confirm-section" class="view-section hidden py-4">
                 <div class="bg-blue-50 rounded-[40px] p-8 border-4 border-blue-200 max-w-2xl mx-auto shadow-2xl">
                     <h2 class="text-3xl text-center mb-8 font-black text-blue-800">予約内容の最終確認</h2>
-                    <div id="confirm-data" class="space-y-4 text-2xl mb-10 leading-relaxed"></div>
-                    <div class="grid grid-cols-2 gap-6 text-center font-black">
-                        <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-[30px] text-2xl">修正する</button>
-                        <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-[30px] text-2xl shadow-lg">このまま送信</button>
+                    <div id="confirm-data" class="space-y-4 text-2xl mb-10 leading-relaxed font-black"></div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-[30px] text-2xl font-black">修正</button>
+                        <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-[30px] text-2xl font-black">送信</button>
                     </div>
                 </div>
             </div>
@@ -80,47 +80,34 @@
                     <button onclick="switchAdminTab('shaken')" id="tab-s" class="px-4 border-b-8 border-blue-500 text-blue-600">車検一覧</button>
                     <button onclick="switchAdminTab('factory')" id="tab-f" class="px-4 text-gray-400">工場一覧</button>
                 </div>
-                <div id="area-s" class="overflow-x-auto">
-                    <table class="w-full admin-table text-left"><thead class="bg-blue-50"><tr><th>受付日時</th><th>車検日</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>備考</th><th>書類</th><th>操作</th></tr></thead><tbody id="list-s"></tbody></table>
-                </div>
-                <div id="area-f" class="hidden overflow-x-auto">
-                    <table class="w-full admin-table text-left"><thead class="bg-orange-50"><tr><th>工場入庫</th><th>車検日</th><th>コース</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>操作</th></tr></thead><tbody id="list-f"></tbody></table>
-                </div>
+                <div id="area-s" class="overflow-x-auto"><table class="w-full admin-table text-left"><thead class="bg-blue-50"><tr><th>受付日時</th><th>車検日</th><th>店舗</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>備考</th><th>書類</th><th>操作</th></tr></thead><tbody id="list-s"></tbody></table></div>
+                <div id="area-f" class="hidden overflow-x-auto"><table class="w-full admin-table text-left"><thead class="bg-orange-50"><tr><th>工場入庫</th><th>車検日</th><th>コース</th><th>店舗</th><th>お客様名</th><th>車種</th><th>ナンバー</th><th>操作</th></tr></thead><tbody id="list-f"></tbody></table></div>
             </div>
         </div>
     </div>
-
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbws2bE1o85EKET4gk0o-pWkhCJgtQzs3SvN8oD0fqlvK1tX-UK8xrUI0hHkogluZOdY/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyKmv8f6zp2qdvnoMwpk6rt_KnHVvrdyg7n-PjP7w7cxRPIFPkEYrdhpK7JiMBLgGuJ/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
-        function handleStoreChange(val) {
-            if (val === "車検課") { if (prompt("車検課パスワード") !== "ss1234") { alert("不正パスワード"); document.getElementById('sel-ss').value = ""; return; } }
-            renderCal();
-        }
-
+        function handleStoreChange(v) { if (v === "車検課") { if (prompt("PW") !== "ss1234") { alert("不正"); document.getElementById('sel-ss').value = ""; return; } } renderCal(); }
         function imgP(input, n) {
             if (input.files && input.files[0]) {
                 const f = input.files[0], r = new FileReader(), btn = document.getElementById(`btn-f${n}`);
                 r.onload = (e) => {
                     if (f.type === "application/pdf") { pics[n] = e.target.result; btn.innerText = "✅ PDF済"; }
                     else {
-                        const img = new Image();
-                        img.onload = () => {
+                        const img = new Image(); img.onload = () => {
                             const cvs = document.createElement('canvas'); let w=img.width, h=img.height, m=1000;
                             if(w>h && w>m){h*=m/w; w=m;} else if(h>m){w*=m/h; h=m;}
                             cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h);
                             pics[n]=cvs.toDataURL('image/jpeg',0.8); btn.innerText = "✅ 添付済";
-                        };
-                        img.src=e.target.result;
+                        }; img.src=e.target.result;
                     }
                     btn.classList.add('attached-btn');
-                };
-                r.readAsDataURL(f);
+                }; r.readAsDataURL(f);
             }
         }
-
         function renderCal() {
             const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
             const y = vD.getFullYear(), m = vD.getMonth(), ss = document.getElementById('sel-ss').value;
@@ -141,50 +128,39 @@
                 grid.appendChild(div);
             }
         }
-
         function getPrevBiz(ds) { let d = new Date(ds); do { d.setDate(d.getDate()-1); } while (d.getDay()===0||d.getDay()===6||HOLS.includes(`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`)); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
-        function selectCourse(n) { curC = n; document.getElementById('disp-c').innerText = n; renderCal(); showSection('form-section'); }
-
+        function selectCourse(n) { curC = n; document.getElementById('disp-c').innerText = n; document.getElementById('row-s').classList.toggle('hidden', n==='一般整備・修理'); document.getElementById('row-a').classList.toggle('hidden', n==='スタンダード車検'); renderCal(); showSection('form-section'); }
         function openConfirm() {
-            const name = document.getElementById('u-name').value, ss = document.getElementById('sel-ss').value, mod = document.getElementById('u-model').value, num = document.getElementById('u-num').value;
-            // バリデーション
-            if (!name || !ss || !mod || !num || (!selS && !selA)) { alert("空欄（名前・車種・ナンバー・日付）を埋めてください"); return; }
-            if (curC !== '一般整備・修理' && (!pics[1] || !pics[2] || !pics[3])) { alert("車検コースは写真3点（受付・車証・自賠）が必須です"); return; }
-
-            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様名：${name} 様</p><p>車種：${mod}</p><p>ナンバー：${num}</p><p>車検日：${selS||'-'}</p><p>入庫日：${selA||'-'}</p>`;
+            const ss = document.getElementById('sel-ss').value, name = document.getElementById('u-name').value;
+            if(!name || !ss || (!selS && !selA)) { alert("店舗、お名前、日付は必須です"); return; }
+            if (curC !== '一般整備・修理' && (!pics[1] || !pics[2])) { alert("受付表と車検証の添付は必須です"); return; }
+            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様名：${name} 様</p><p>車種：${document.getElementById('u-model').value}</p><p>車検日：${selS||'-'}</p><p>入庫日：${selA||'-'}</p>`;
             showSection('confirm-section');
         }
-
         async function send() {
             const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true;
             const data = { action: 'create', shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, course: curC, name: document.getElementById('u-name').value, carModel: document.getElementById('u-model').value, carNum: document.getElementById('u-num').value, memo: document.getElementById('u-memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3] };
-            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('送信完了しました'); location.reload(); } catch(e) { alert('通信エラー'); btn.disabled = false; btn.innerText = "再送信"; }
+            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('送信完了'); location.reload(); } catch(e) { alert('エラー'); btn.disabled = false; btn.innerText = "再送信"; }
         }
-
         function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
         function moveMonth(d) { vD.setMonth(vD.getMonth() + d); renderCal(); }
         function switchAdminTab(t) { document.getElementById('area-s').classList.toggle('hidden', t==='factory'); document.getElementById('area-f').classList.toggle('hidden', t==='shaken'); document.getElementById('tab-s').className = t==='shaken' ? "px-4 border-b-8 border-blue-500 text-blue-600" : "px-4 text-gray-400"; document.getElementById('tab-f').className = t==='factory' ? "px-4 border-b-8 border-slate-700 text-slate-800" : "px-4 text-gray-400"; }
-
         function checkAdmin(pw) {
-            if (prompt("管理者PW") === pw) {
+            if (prompt("PW") === pw) {
                 showSection('admin-section');
                 fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => {
                     const bs = document.getElementById('list-s'), bf = document.getElementById('list-f'); bs.innerHTML = bf.innerHTML = '';
                     data.forEach(r => {
-                        const links = `<div class="flex flex-col gap-1">${r.url1.startsWith('http')?`<a href="${r.url1}" target="_blank" class="text-blue-500 underline">受付</a>`:""}${r.url2.startsWith('http')?`<a href="${r.url2}" target="_blank" class="text-blue-500 underline">車証</a>`:""}</div>`;
-                        const btns = `<button onclick="editRow(${r.rowId}, '${r.name}')" class="text-blue-600 mr-2">編集</button><button onclick="deleteRow(${r.rowId}, '${r.name}')" class="text-red-600">削除</button>`;
-                        bs.insertAdjacentHTML('beforeend', `<tr><td>${r.timestamp}</td><td>${r.shakenDate}</td><td>${r.ss}</td><td>${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td>${r.memo}</td><td>${links}</td><td>${btns}</td></tr>`);
-                        if (r.course !== 'スタンダード車検') bf.insertAdjacentHTML('beforeend', `<tr><td>${r.arrivalDate}</td><td>${r.shakenDate}</td><td>${r.course}</td><td>${r.ss}</td><td>${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td>${btns}</td></tr>`);
+                        const lk = `<div class="flex flex-col gap-1 text-[8px]">${r.url1.startsWith('http')?`<a href="${r.url1}" target="_blank" class="text-blue-500 underline">受付</a>`:""}${r.url2.startsWith('http')?`<a href="${r.url2}" target="_blank" class="text-blue-500 underline">車証</a>`:""}</div>`;
+                        const ops = `<button onclick="editRow(${r.rowId},'${r.name}')" class="text-blue-600 mr-2">備考</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-600">削除</button>`;
+                        bs.insertAdjacentHTML('beforeend', `<tr><td>${r.timestamp}</td><td>${r.shakenDate}</td><td>${r.ss}</td><td class="font-bold">${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td class="text-[10px]">${r.memo}</td><td>${lk}</td><td>${ops}</td></tr>`);
+                        if (r.course !== 'スタンダード車検') bf.insertAdjacentHTML('beforeend', `<tr><td>${r.arrivalDate}</td><td>${r.shakenDate}</td><td>${r.course}</td><td>${r.ss}</td><td class="font-bold">${r.name}</td><td>${r.carModel}</td><td>${r.carNum}</td><td>${ops}</td></tr>`);
                     });
                 });
             }
         }
-
-        async function deleteRow(id, name) { if (confirm(`${name}様のデータを削除します。よろしいですか？`)) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'delete', rowId:id})}); alert('削除しました'); checkAdmin('ss1234'); } }
-        async function editRow(id, name) { 
-            const newMemo = prompt(`${name}様の備考を編集します`, "");
-            if (newMemo !== null) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'edit', rowId:id, memo:newMemo, name:name})}); alert('更新しました'); checkAdmin('ss1234'); }
-        }
+        async function deleteRow(id, n) { if (confirm(`${n}様のデータを削除しますか？`)) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'delete', rowId:id})}); checkAdmin('ss1234'); } }
+        async function editRow(id, n) { const m = prompt(`${n}様の備考を編集`, ""); if (m !== null) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'edit', rowId:id, memo:m})}); checkAdmin('ss1234'); } }
     </script>
 </body>
 </html>
