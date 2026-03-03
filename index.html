@@ -8,6 +8,7 @@
         body { font-family: sans-serif; font-weight: bold; overflow-x: hidden; }
         .selected-day { background-color: #3b82f6 !important; color: white !important; }
         .disabled-day { color: #e2e8f0 !important; cursor: not-allowed !important; background-color: #f8fafc; }
+        .attached-btn { background-color: #22c55e !important; color: white !important; } /* 緑色に変更 */
     </style>
 </head>
 <body class="bg-slate-100 p-2 md:p-4 text-base">
@@ -39,9 +40,18 @@
                             <div id="cal-grid" class="grid grid-cols-7 gap-1 text-center text-xl"></div>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-2 rounded-lg font-bold text-sm">受付表</button><input type="file" id="f1" class="hidden" onchange="imgP(this,1)"><img id="i1" class="mt-1 mx-auto max-h-16 hidden"></div>
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-2 rounded-lg font-bold text-sm">車検証</button><input type="file" id="f2" class="hidden" onchange="imgP(this,2)"><img id="i2" class="mt-1 mx-auto max-h-16 hidden"></div>
-                            <div class="border-2 p-2 rounded-xl bg-white text-center"><button onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-2 rounded-lg font-bold text-sm">自賠責</button><input type="file" id="f3" class="hidden" onchange="imgP(this,3)"><img id="i3" class="mt-1 mx-auto max-h-16 hidden"></div>
+                            <div class="border-2 p-2 rounded-xl bg-white text-center">
+                                <button id="btn-f1" onclick="document.getElementById('f1').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">受付表 添付</button>
+                                <input type="file" id="f1" class="hidden" accept="image/*" onchange="imgP(this,1)">
+                            </div>
+                            <div class="border-2 p-2 rounded-xl bg-white text-center">
+                                <button id="btn-f2" onclick="document.getElementById('f2').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">車検証 添付</button>
+                                <input type="file" id="f2" class="hidden" accept="image/*" onchange="imgP(this,2)">
+                            </div>
+                            <div class="border-2 p-2 rounded-xl bg-white text-center">
+                                <button id="btn-f3" onclick="document.getElementById('f3').click()" class="bg-blue-50 w-full py-4 rounded-lg font-bold text-sm transition-all">自賠責 添付</button>
+                                <input type="file" id="f3" class="hidden" accept="image/*" onchange="imgP(this,3)">
+                            </div>
                         </div>
                     </div>
                     <div class="space-y-3">
@@ -85,7 +95,7 @@
     </div>
 
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbz1ijHuMbfFL-GKxJAoKG16dcPgVmVM1Alk-7PFhNfqsJ2x_XYGYTlOfj3fwcDrB3hK/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwaaxTGdE5QC7EULwfcX93Hv6AG_zjWsibbdFcHwkF8ERvHrbmTTMwWH4M_4oYlhZqk/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
@@ -101,13 +111,16 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height, max = 800;
+                        let w = img.width, h = img.height, max = 1000; // 解像度を少しアップ
                         if (w > h && w > max) { h *= max/w; w = max; } else if (h > max) { w *= max/h; h = max; }
                         canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        pics[n] = canvas.toDataURL('image/jpeg', 0.7);
-                        document.getElementById(`i${n}`).src = pics[n];
-                        document.getElementById(`i${n}`).classList.remove('hidden');
+                        pics[n] = canvas.toDataURL('image/jpeg', 0.8);
+                        
+                        // 【修正点】ボタンの見た目を変える
+                        const btn = document.getElementById(`btn-f${n}`);
+                        btn.innerText = "✅ 添付済";
+                        btn.classList.add('attached-btn');
                     };
                     img.src = e.target.result;
                 };
@@ -120,8 +133,8 @@
         function renderCal() {
             const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
             const y = vD.getFullYear(), m = vD.getMonth(), ss = document.getElementById('sel-ss').value;
-            const today = new Date(); today.setHours(0,0,0,0);
-            const limitDate = new Date(); limitDate.setDate(today.getDate() + 3); // 3日後の日付を取得
+            const limitDate = new Date(); limitDate.setHours(0,0,0,0);
+            limitDate.setDate(limitDate.getDate() + 3);
 
             document.getElementById('cal-m').innerText = `${y}年 ${m+1}月`;
             ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 font-bold mb-1">${d}</div>`));
@@ -131,8 +144,6 @@
                 const target = new Date(y, m, i);
                 const k = `${y}/${m+1}/${i}`;
                 const isH = target.getDay()===0 || target.getDay()===6 || HOLS.includes(k);
-                
-                // 【車検課以外】 かつ 【3日以内 または 休日】 の場合は制限
                 const isPast = (target < limitDate);
                 const isLocked = (ss !== "車検課") && (isPast || isH);
 
@@ -158,16 +169,51 @@
         function openConfirm() {
             const ss = document.getElementById('sel-ss').value;
             const name = document.getElementById('u-name').value;
-            if(!ss || !name || (!selS && !selA)) { alert("未入力の項目があります"); return; }
-            const html = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様：${name}</p><p>車種：${document.getElementById('u-model').value}</p><p>ナンバー：${document.getElementById('u-num').value}</p><p class="text-blue-600">車検：${selS||'-'}</p><p class="text-orange-600">入庫：${selA||'-'}</p>`;
+            if(!ss || !name || (!selS && !selA)) { alert("店舗、お名前、日付を選択してください"); return; }
+            
+            // 添付状況の確認
+            const p1 = pics[1] ? "✅ あり" : "❌ なし";
+            const p2 = pics[2] ? "✅ あり" : "❌ なし";
+            const p3 = pics[3] ? "✅ あり" : "❌ なし";
+
+            const html = `
+                <p>【コース】 ${curC}</p>
+                <p>【店舗】 ${ss}</p>
+                <p>【お客様】 ${name} 様</p>
+                <p>【車種】 ${document.getElementById('u-model').value || "-"}</p>
+                <p>【ナンバー】 ${document.getElementById('u-num').value || "-"}</p>
+                <p class="text-blue-600">【車検予定】 ${selS||'-'}</p>
+                <p class="text-orange-600">【工場入庫】 ${selA||'-'}</p>
+                <hr class="my-4 border-2">
+                <p class="text-sm text-gray-600">写真添付：</p>
+                <p class="text-sm">受付表:${p1} / 車検証:${p2} / 自賠責:${p3}</p>
+            `;
             document.getElementById('confirm-data').innerHTML = html;
             showSection('confirm-section');
         }
 
         async function send() { 
-            const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true;
-            const data = { shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, course: curC, name: document.getElementById('u-name').value, carModel: document.getElementById('u-model').value, carNum: document.getElementById('u-num').value, memo: document.getElementById('u-memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3] }; 
-            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('送信完了'); location.reload(); } catch(e) { alert('エラー'); btn.disabled = false; btn.innerText = "送信する"; } 
+            const btn = document.getElementById('sb-btn'); 
+            btn.innerText = "送信中...（写真をアップロード中）"; 
+            btn.disabled = true;
+            
+            const data = { 
+                shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, 
+                course: curC, name: document.getElementById('u-name').value, 
+                carModel: document.getElementById('u-model').value, 
+                carNum: document.getElementById('u-num').value, 
+                memo: document.getElementById('u-memo').value, 
+                photo1: pics[1], photo2: pics[2], photo3: pics[3] 
+            }; 
+
+            try { 
+                const response = await fetch(GAS_URL, {method:"POST", body:JSON.stringify(data)}); 
+                alert('送信が完了しました。スプレッドシートをご確認ください。'); 
+                location.reload(); 
+            } catch(e) { 
+                alert('送信エラーが発生しました。インターネット接続を確認してください。'); 
+                btn.disabled = false; btn.innerText = "このまま送信"; 
+            } 
         }
 
         function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
