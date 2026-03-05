@@ -9,9 +9,9 @@
         .selected-day { background-color: #3b82f6 !important; color: white !important; }
         .disabled-day { color: #cbd5e1 !important; cursor: not-allowed !important; background-color: #f8fafc; }
         .attached-btn { background-color: #22c55e !important; color: white !important; }
-        .admin-table th { background-color: #f1f5f9; color: #475569; font-size: 13px; padding: 10px 6px; border: 1px solid #e2e8f0; white-space: nowrap; }
+        .admin-table th { background-color: #f1f5f9; color: #475569; font-size: 13px; padding: 10px 6px; border: 1px solid #e2e8f0; white-space: nowrap; text-align: center; }
         .admin-table td { font-size: 14px; padding: 10px 6px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
-        .memo-cell { min-width: 200px; white-space: normal !important; line-height: 1.4; font-size: 12px; color: #64748b; }
+        .memo-cell { min-width: 150px; white-space: normal !important; line-height: 1.4; font-size: 12px; color: #64748b; }
         .admin-table tr:nth-child(even) { background-color: #fdfdfd; }
     </style>
 </head>
@@ -27,10 +27,10 @@
 
         <div id="main-content">
             <div id="course-section" class="view-section py-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-2xl font-black">
-                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-blue-50">⏱️<br>スタンダード車検</button>
-                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-orange-50">🛡️<br>セーフティ車検</button>
-                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-green-50">🔧<br>一般整備・修理</button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-blue-50 text-2xl font-black transition-all">⏱️<br>スタンダード車検</button>
+                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-orange-50 text-2xl font-black transition-all">🛡️<br>セーフティ車検</button>
+                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-200 p-8 rounded-3xl bg-white shadow-lg hover:bg-green-50 text-2xl font-black transition-all">🔧<br>一般整備・修理</button>
                 </div>
             </div>
 
@@ -69,10 +69,10 @@
             </div>
 
             <div id="confirm-section" class="view-section hidden py-4 text-center">
-                <div class="bg-blue-50 rounded-[40px] p-8 border-4 border-blue-200 max-w-2xl mx-auto shadow-2xl font-black">
-                    <h2 class="text-3xl mb-8 text-blue-800 font-black">予約内容の最終確認</h2>
-                    <div id="confirm-data" class="space-y-4 text-2xl mb-10 text-left"></div>
-                    <div class="grid grid-cols-2 gap-6">
+                <div class="bg-blue-50 rounded-[40px] p-8 border-4 border-blue-200 max-w-2xl mx-auto shadow-2xl font-black text-left">
+                    <h2 class="text-3xl mb-8 text-blue-800 text-center font-black">予約内容の最終確認</h2>
+                    <div id="confirm-data" class="space-y-4 text-2xl mb-10"></div>
+                    <div class="grid grid-cols-2 gap-6 text-center">
                         <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-[30px] text-2xl">修正</button>
                         <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-[30px] text-2xl shadow-lg">送信</button>
                     </div>
@@ -84,17 +84,27 @@
                     <button onclick="switchAdminTab('shaken')" id="tab-s" class="px-4 border-b-8 border-blue-500 text-blue-600">車検一覧</button>
                     <button onclick="switchAdminTab('factory')" id="tab-f" class="px-4 text-gray-400">工場一覧</button>
                 </div>
-                <div id="area-s" class="overflow-x-auto"><table class="w-full admin-table text-left shadow-sm"><thead><tr><th>車検日</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>書類</th><th>備考・作業内容</th><th>受付日時</th><th>操作</th></tr></thead><tbody id="list-s"></tbody></table></div>
-                <div id="area-f" class="hidden overflow-x-auto"><table class="w-full admin-table text-left shadow-sm"><thead><tr><th class="text-orange-700">工場入庫</th><th>車検日</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>備考・作業内容</th><th>受付日時</th><th>操作</th></tr></thead><tbody id="list-f"></tbody></table></div>
+                <div id="area-s" class="overflow-x-auto">
+                    <table class="w-full admin-table text-left shadow-sm">
+                        <thead><tr><th>車検日</th><th>コース</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>書類</th><th>備考</th><th>受付日時</th><th>操作</th></tr></thead>
+                        <tbody id="list-s"></tbody>
+                    </table>
+                </div>
+                <div id="area-f" class="hidden overflow-x-auto">
+                    <table class="w-full admin-table text-left shadow-sm">
+                        <thead><tr><th class="text-orange-700">工場入庫</th><th>車検日</th><th>コース</th><th>店舗名</th><th>お客様名</th><th>車種</th><th>備考</th><th>受付日時</th><th>操作</th></tr></thead>
+                        <tbody id="list-f"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxdG5BHpw-7UMz71_uD-YfYsEXV6o2fNM4tsNyyXUZeEwMiZgoWxnHTBHm7qQ9JrMst/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzLkqpQ-zExlaN04wLB8jeylnWLsHso7NrslF8Hb_96PBRvBze3eehRlqK0RCITzY17/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:"",4:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
-        function handleStoreChange(v) { if (v === "車検課") { if (prompt("車検課PW") !== "ss1234") { alert("不正"); document.getElementById('sel-ss').value = ""; return; } } renderCal(); }
+        function handleStoreChange(v) { if (v === "車検課") { if (prompt("PW") !== "ss1234") { alert("不正"); document.getElementById('sel-ss').value = ""; return; } } renderCal(); }
         function imgP(input, n) {
             if (input.files && input.files[0]) {
                 const f = input.files[0], r = new FileReader(), btn = document.getElementById(`btn-f${n}`);
@@ -117,7 +127,7 @@
             const y = vD.getFullYear(), m = vD.getMonth(), ss = document.getElementById('sel-ss').value;
             const lim = new Date(); lim.setHours(0,0,0,0); lim.setDate(lim.getDate() + 3);
             document.getElementById('cal-m').innerText = `${y}年 ${m+1}月`;
-            ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 font-bold mb-1">${d}</div>`));
+            ['日','月','火','水','木','金','土'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="text-gray-400 font-bold mb-1 text-xs">${d}</div>`));
             const f = new Date(y, m, 1).getDay(), l = new Date(y, m+1, 0).getDate();
             for(let i=0; i<f; i++) grid.appendChild(document.createElement('div'));
             for(let i=1; i<=l; i++) {
@@ -142,17 +152,27 @@
             const ss = document.getElementById('sel-ss').value, name = document.getElementById('u-name').value;
             if(!name || !ss || (!selS && !selA)) { alert("店舗、お客様名、日付は必須です"); return; }
             if (curC !== '一般整備・修理' && (!pics[1] || !pics[2] || !pics[3])) { alert("受付表・車検証・自賠責の3点は添付が必須です"); return; }
-            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様：${name} 様</p><p>車種：${document.getElementById('u-model').value || "-"}</p><p class="text-blue-600 font-black">車検日：${selS||'-'}</p><p class="text-orange-600 font-black">入庫日：${selA||'-'}</p>`;
+            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様：${name} 様</p><p>車種：${document.getElementById('u-model').value || "-"}</p><p class="text-blue-600">車検：${selS||'-'}</p><p class="text-orange-600">入庫：${selA||'-'}</p>`;
             showSection('confirm-section');
         }
 
         async function send() {
             const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true;
             const data = { action: 'create', shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, course: curC, name: document.getElementById('u-name').value, carModel: document.getElementById('u-model').value, carNum: document.getElementById('u-num').value, memo: document.getElementById('u-memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3], photo4: pics[4] };
-            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('送信完了しました'); location.reload(); } catch(e) { alert('エラー発生'); btn.disabled = false; btn.innerText = "再送信"; }
+            try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('送信完了しました'); location.reload(); } catch(e) { alert('エラー'); btn.disabled = false; btn.innerText = "再送信"; }
         }
 
         function checkAdmin(pw) { if (prompt("PW") === pw) { showSection('admin-section'); fetchAdminData(); } }
+        
+        // コース別の色分けバッジを生成する関数
+        function getCourseBadge(course) {
+            let cls = "px-2 py-1 rounded-full text-[10px] font-bold ";
+            if (course.includes("スタンダード")) cls += "bg-blue-100 text-blue-800";
+            else if (course.includes("セーフティ")) cls += "bg-orange-100 text-orange-800";
+            else cls += "bg-green-100 text-green-800";
+            return `<span class="${cls}">${course}</span>`;
+        }
+
         function fetchAdminData() {
             fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => {
                 const bs = document.getElementById('list-s'), bf = document.getElementById('list-f'); bs.innerHTML = bf.innerHTML = '';
@@ -163,14 +183,23 @@
                         ${r.url3.startsWith('http')?`<a href="${r.url3}" target="_blank" class="bg-blue-50 text-blue-600 px-1 py-1 rounded text-[10px] border border-blue-200">自賠</a>`:""}
                         ${r.url4.startsWith('http')?`<a href="${r.url4}" target="_blank" class="bg-blue-600 text-white px-1 py-1 rounded text-[10px]">保険</a>`:""}
                     </div>`;
-                    const ops = `<div class="flex gap-2"><button onclick="editRow(${r.rowId},'${r.name}')" class="text-blue-500 text-xs">備考</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-xs">削除</button></div>`;
-                    bs.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-blue-700">${r.shakenDate}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td>${lks}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td>${ops}</td></tr>`);
-                    if (r.course !== 'スタンダード車検') bf.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-orange-600">${r.arrivalDate}</td><td class="text-gray-400">${r.shakenDate}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td>${ops}</td></tr>`);
+                    const ops = `<div class="flex gap-2"><button onclick="editRow(${r.rowId},'${r.name}')" class="text-blue-500 text-[10px]">備考</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-[10px]">削除</button></div>`;
+                    
+                    // コースバッジを取得
+                    const cBadge = getCourseBadge(r.course);
+
+                    // 車検一覧
+                    bs.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-blue-700">${r.shakenDate}</td><td>${cBadge}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td>${lks}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td>${ops}</td></tr>`);
+                    
+                    // 工場一覧
+                    if (r.course !== 'スタンダード車検') {
+                        bf.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-orange-600">${r.arrivalDate}</td><td class="text-gray-400">${r.shakenDate}</td><td>${cBadge}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td>${ops}</td></tr>`);
+                    }
                 });
             });
         }
         async function deleteRow(id, n) { if (confirm(`${n}様のデータを削除しますか？`)) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'delete', rowId:id})}); fetchAdminData(); } }
-        async function editRow(id, n) { const m = prompt(`${n}様の備考編集`, ""); if (m !== null) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'edit', rowId:id, memo:m})}); fetchAdminData(); } }
+        async function editRow(id, n) { const m = prompt(`${n}様の備考を編集`, ""); if (m !== null) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'edit', rowId:id, memo:m})}); fetchAdminData(); } }
     </script>
 </body>
 </html>
