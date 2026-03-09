@@ -17,10 +17,9 @@
         .day-selected { border-color: #3b82f6 !important; border-width: 3px !important; background-color: #eff6ff !important; }
         .dow-active { background-color: #3b82f6; color: white; border-radius: 4px; padding: 2px 6px; }
         .attached-btn { background-color: #22c55e !important; color: white !important; }
-        .admin-table th { background-color: #f1f5f9; color: #475569; font-size: 13px; padding: 10px 6px; border: 1px solid #e2e8f0; white-space: nowrap; text-align: center; }
-        .admin-table td { font-size: 14px; padding: 10px 6px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
-        .memo-cell { min-width: 180px; white-space: normal !important; line-height: 1.4; font-size: 12px; color: #64748b; }
-        .admin-table tr:nth-child(even) { background-color: #fdfdfd; }
+        .admin-table th { background-color: #f1f5f9; color: #475569; font-size: 12px; padding: 10px 4px; border: 1px solid #e2e8f0; white-space: nowrap; text-align: center; }
+        .admin-table td { font-size: 13px; padding: 10px 4px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
+        .memo-cell { min-width: 150px; white-space: normal !important; line-height: 1.4; font-size: 11px; color: #64748b; }
     </style>
 </head>
 <body class="bg-slate-50 p-2 md:p-4 text-base">
@@ -28,17 +27,17 @@
         <div class="flex justify-between items-center mb-6 border-b-2 pb-4">
             <h1 class="text-xl md:text-3xl text-blue-800 font-black tracking-tighter" onclick="location.reload()">🏪 車検予約システム２０２６</h1>
             <div class="flex space-x-2">
-                <button onclick="showSection('course-section')" class="px-5 py-2 bg-gray-100 rounded-xl text-lg hover:bg-gray-200">新規</button>
-                <button onclick="checkAdmin('ss1234')" class="px-5 py-2 bg-gray-100 rounded-xl text-lg hover:bg-gray-200">管理</button>
+                <button onclick="showSection('course-section')" class="px-5 py-2 bg-gray-100 rounded-xl text-lg hover:bg-gray-200">新規予約</button>
+                <button onclick="checkAdmin('ss1234')" class="px-5 py-2 bg-gray-100 rounded-xl text-lg hover:bg-gray-200">管理画面</button>
             </div>
         </div>
 
         <div id="main-content">
             <div id="course-section" class="view-section py-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-2xl font-black">
-                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-100 p-8 rounded-3xl bg-white shadow-lg hover:border-blue-300">⏱️<br>スタンダード車検</button>
-                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-100 p-8 rounded-3xl bg-white shadow-lg hover:border-orange-300">🛡️<br>セーフティ車検</button>
-                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-100 p-8 rounded-3xl bg-white shadow-lg hover:border-green-300">🔧<br>一般整備・修理</button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="selectCourse('スタンダード車検')" class="border-4 border-blue-100 p-8 rounded-3xl bg-white shadow-lg hover:border-blue-300 text-2xl font-black">⏱️<br>スタンダード車検</button>
+                    <button onclick="selectCourse('セーフティ車検')" class="border-4 border-orange-100 p-8 rounded-3xl bg-white shadow-lg hover:border-orange-300 text-2xl font-black">🛡️<br>セーフティ車検</button>
+                    <button onclick="selectCourse('一般整備・修理')" class="border-4 border-green-100 p-8 rounded-3xl bg-white shadow-lg hover:border-green-300 text-2xl font-black">🔧<br>一般整備・修理</button>
                 </div>
             </div>
 
@@ -81,7 +80,7 @@
             <div id="confirm-section" class="view-section hidden py-4 text-center">
                 <div class="bg-blue-50 rounded-[40px] p-8 border-4 border-blue-200 max-w-2xl mx-auto shadow-2xl font-black">
                     <h2 class="text-3xl mb-8 text-blue-800">予約内容の最終確認</h2>
-                    <div id="confirm-data" class="space-y-4 text-2xl mb-10 text-left"></div>
+                    <div id="confirm-data" class="space-y-4 text-2xl mb-10 text-left font-black"></div>
                     <div class="grid grid-cols-2 gap-6">
                         <button onclick="showSection('form-section')" class="bg-gray-400 text-white py-6 rounded-3xl text-2xl">修正</button>
                         <button onclick="send()" id="sb-btn" class="bg-red-600 text-white py-6 rounded-3xl text-2xl shadow-lg">送信</button>
@@ -99,14 +98,18 @@
             </div>
         </div>
     </div>
+
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbyigRtO3Q8xcf6T7QEYestgRzU7pYygO33leSp1Rx6dDC8KuQEiQjXdNhp91RRz2Zsq/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzjqWeH7EXm2wxwO3RkpED9bzNg6KLNqGsdacQo2cvRxnjF6JABeCZKg1rntS0A4G7A/exec"; 
         let curC = '', selS = '', selA = '', vD = new Date(), pics = {1:"",2:"",3:"",4:""};
         const HOLS = ["2026/1/1","2026/1/12","2026/2/11","2026/2/23","2026/3/20","2026/4/29","2026/5/3","2026/5/4","2026/5/5","2026/5/6","2026/7/20","2026/8/11","2026/9/21","2026/9/22","2026/9/23","2026/10/12","2026/11/3","2026/11/23"];
 
         function handleStoreChange(v) { if (v === "車検課") { if (prompt("車検課PW") !== "ss1234") { alert("不正"); document.getElementById('sel-ss').value = ""; return; } } renderCal(); }
-        function imgP(input, n) { if (input.files && input.files[0]) { const f = input.files[0], r = new FileReader(), btn = document.getElementById(`btn-f${n}`); r.onload = (e) => { if (f.type === "application/pdf") { pics[n] = e.target.result; btn.innerText = "✅ PDF済"; } else { const img = new Image(); img.onload = () => { const cvs = document.createElement('canvas'); let w=img.width, h=img.height, m=1000; if(w>h && w>m){h*=m/w; w=m;} else if(h>m){w*=m/h; h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); pics[n]=cvs.toDataURL('image/jpeg',0.8); btn.innerText = "✅ 添付済"; }; img.src=e.target.result; } btn.classList.add('attached-btn'); }; r.readAsDataURL(f); } }
-        
+        function moveMonth(d) { vD.setMonth(vD.getMonth() + d); renderCal(); }
+        function selectCourse(n) { curC = n; document.getElementById('disp-c').innerText = n; document.getElementById('row-s').classList.toggle('hidden', n==='一般整備・修理'); document.getElementById('row-a').classList.toggle('hidden', n==='スタンダード車検'); renderCal(); showSection('form-section'); }
+        function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+        function switchAdminTab(t) { document.getElementById('area-s').classList.toggle('hidden', t==='factory'); document.getElementById('area-f').classList.toggle('hidden', t==='shaken'); document.getElementById('tab-s').className = t==='shaken' ? "px-4 border-b-8 border-blue-500 text-blue-600" : "px-4 text-gray-400"; document.getElementById('tab-f').className = t==='factory' ? "px-4 border-b-8 border-slate-700 text-slate-800" : "px-4 text-gray-400"; }
+
         function renderCal() {
             const grid = document.getElementById('cal-grid'); grid.innerHTML = '';
             const y = vD.getFullYear(), m = vD.getMonth(), ss = document.getElementById('sel-ss').value;
@@ -122,11 +125,11 @@
             for(let i=1; i<=l; i++) {
                 const target = new Date(y, m, i), k = `${y}/${m+1}/${i}`;
                 const isH = (target.getDay()===0 || HOLS.includes(k));
-                const isLeadTimeLocked = (target < lim);
+                const isLocked = (target < lim);
                 let statusText = '○', typeClass = 'day-ok', statusClass = 'status-ok';
                 if (!isShakenka) {
                     if (isH) { statusText = '休'; typeClass = 'day-holiday'; statusClass = 'status-holiday'; }
-                    else if (isLeadTimeLocked) { statusText = '締切'; typeClass = 'day-locked'; statusClass = 'status-locked'; }
+                    else if (isLocked) { statusText = '締切'; typeClass = 'day-locked'; statusClass = 'status-locked'; }
                 }
                 if (selS === k) typeClass += ' day-selected';
                 const div = document.createElement('div');
@@ -137,9 +140,7 @@
                         selS = k;
                         if (curC==='一般整備・修理') { selA = k; selS = ""; } 
                         else { selA = (curC==='セーフティ車検') ? getPrevBiz(k) : ""; }
-                        renderCal();
-                        document.getElementById('date-s').innerText = selS || '-';
-                        document.getElementById('date-a').innerText = selA || '-';
+                        renderCal(); document.getElementById('date-s').innerText = selS || '-'; document.getElementById('date-a').innerText = selA || '-';
                     };
                 }
                 grid.appendChild(div);
@@ -147,36 +148,50 @@
         }
 
         function getPrevBiz(ds) { let d = new Date(ds); do { d.setDate(d.getDate()-1); } while (d.getDay()===0||HOLS.includes(`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`)); return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`; }
-        function selectCourse(n) { curC = n; document.getElementById('disp-c').innerText = n; document.getElementById('row-s').classList.toggle('hidden', n==='一般整備・修理'); document.getElementById('row-a').classList.toggle('hidden', n==='スタンダード車検'); renderCal(); showSection('form-section'); }
-        function showSection(id) { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-        function moveMonth(d) { vD.setMonth(vD.getMonth() + d); renderCal(); }
-        function switchAdminTab(t) { document.getElementById('area-s').classList.toggle('hidden', t==='factory'); document.getElementById('area-f').classList.toggle('hidden', t==='shaken'); document.getElementById('tab-s').className = t==='shaken' ? "px-4 border-b-8 border-blue-500 text-blue-600" : "px-4 text-gray-400"; document.getElementById('tab-f').className = t==='factory' ? "px-4 border-b-8 border-slate-700 text-slate-800" : "px-4 text-gray-400"; }
+
+        function imgP(input, n) { if (input.files && input.files[0]) { const f = input.files[0], r = new FileReader(), btn = document.getElementById(`btn-f${n}`); r.onload = (e) => { if (f.type === "application/pdf") { pics[n] = e.target.result; btn.innerText = "✅ PDF済"; } else { const img = new Image(); img.onload = () => { const cvs = document.createElement('canvas'); let w=img.width, h=img.height, m=1000; if(w>h && w>m){h*=m/w; w=m;} else if(h>m){w*=m/h; h=m;} cvs.width=w; cvs.height=h; cvs.getContext('2d').drawImage(img,0,0,w,h); pics[n]=cvs.toDataURL('image/jpeg',0.8); btn.innerText = "✅ 添付済"; }; img.src=e.target.result; } btn.classList.add('attached-btn'); }; r.readAsDataURL(f); } }
+
         function openConfirm() {
             const ss = document.getElementById('sel-ss').value, name = document.getElementById('u-name').value;
             if(!name || !ss || (!selS && !selA)) { alert("必須項目を埋めてください"); return; }
-            if (curC !== '一般整備・修理' && (!pics[1] || !pics[2] || !pics[3])) { alert("車検コースは3点セット（受付・車証・自賠）が必須です"); return; }
-            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様：${name} 様</p><p class="text-blue-600">車検：${selS||'-'}</p><p class="text-orange-600">入庫：${selA||'-'}</p>`;
+            if (curC !== '一般整備・修理' && (!pics[1] || !pics[2] || !pics[3])) { alert("受付表・車検証・自賠責は必須です"); return; }
+            document.getElementById('confirm-data').innerHTML = `<p>コース：${curC}</p><p>店舗：${ss}</p><p>お客様：${name} 様</p><p class="text-blue-600">車検日：${selS||'-'}</p><p class="text-orange-600">入庫日：${selA||'-'}</p>`;
             showSection('confirm-section');
         }
+
         async function send() {
             const btn = document.getElementById('sb-btn'); btn.innerText = "送信中..."; btn.disabled = true;
             const data = { action: 'create', shakenDate: selS, arrivalDate: selA, ss: document.getElementById('sel-ss').value, course: curC, name: document.getElementById('u-name').value, carModel: document.getElementById('u-model').value, carNum: document.getElementById('u-num').value, memo: document.getElementById('u-memo').value, photo1: pics[1], photo2: pics[2], photo3: pics[3], photo4: pics[4] };
             try { await fetch(GAS_URL, {method:"POST", mode:"no-cors", body:JSON.stringify(data)}); alert('予約完了！メールを送信しました。'); location.reload(); } catch(e) { alert('エラー'); btn.disabled = false; btn.innerText = "再送信"; }
         }
+
+        function checkAdmin(pw) { if (prompt("管理者パスワードを入力") === pw) { showSection('admin-section'); fetchAdminData(); } else { alert("不正"); } }
+
         function getLinksHtml(r) { return `<div class="flex gap-1 flex-wrap">${r.url1.startsWith('http')?`<a href="${r.url1}" target="_blank" class="bg-blue-50 text-blue-600 px-1 py-1 rounded text-[10px] border border-blue-200">受付</a>`:""}${r.url2.startsWith('http')?`<a href="${r.url2}" target="_blank" class="bg-blue-50 text-blue-600 px-1 py-1 rounded text-[10px] border border-blue-200">車証</a>`:""}${r.url3.startsWith('http')?`<a href="${r.url3}" target="_blank" class="bg-blue-50 text-blue-600 px-1 py-1 rounded text-[10px] border border-blue-200">自賠</a>`:""}${r.url4.startsWith('http')?`<a href="${r.url4}" target="_blank" class="bg-blue-600 text-white px-1 py-1 rounded text-[10px]">保険</a>`:""}</div>`; }
         function getCourseBadge(course) { let cls = "px-2 py-1 rounded-full text-[10px] font-bold "; if (course.includes("スタンダード")) cls += "bg-blue-100 text-blue-800"; else if (course.includes("セーフティ")) cls += "bg-orange-100 text-orange-800"; else cls += "bg-green-100 text-green-800"; return `<span class="${cls}">${course}</span>`; }
+
         function fetchAdminData() {
             fetch(GAS_URL + "?action=getData").then(res => res.json()).then(data => {
                 const bs = document.getElementById('list-s'), bf = document.getElementById('list-f'); bs.innerHTML = bf.innerHTML = '';
-                const sortedS = [...data].sort((a,b) => a.shakenDate.localeCompare(b.shakenDate) || a.timestamp.localeCompare(b.timestamp));
-                sortedS.forEach(r => { bs.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-blue-700">${r.shakenDate}</td><td>${getCourseBadge(r.course)}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td>${getLinksHtml(r)}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td><button onclick="editRow(${r.rowId},'${r.name}')" class="text-blue-500 text-xs">備考</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-xs">削除</button></td></tr>`); });
-                const sortedF = [...data].sort((a,b) => a.arrivalDate.localeCompare(b.arrivalDate) || a.timestamp.localeCompare(b.timestamp));
-                sortedF.forEach(r => { if (r.course !== 'スタンダード車検') bf.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-orange-600">${r.arrivalDate}</td><td class="text-gray-400">${r.shakenDate}</td><td>${getCourseBadge(r.course)}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td><button onclick="editRow(${r.rowId},'${r.name}')" class="text-blue-500 text-xs">備考</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-xs">削除</button></td></tr>`); });
+                // 日付昇順ソート
+                const sS = [...data].sort((a,b) => a.shakenDate.localeCompare(b.shakenDate) || a.timestamp.localeCompare(b.timestamp));
+                sS.forEach(r => { bs.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-blue-700">${r.shakenDate}</td><td>${getCourseBadge(r.course)}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td>${r.carModel}</td><td>${getLinksHtml(r)}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td><button onclick='editRes(${JSON.stringify(r)})' class="text-blue-500 text-xs">編集</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-xs ml-2">削除</button></td></tr>`); });
+                const sF = [...data].sort((a,b) => a.arrivalDate.localeCompare(b.arrivalDate) || a.timestamp.localeCompare(b.timestamp));
+                sF.forEach(r => { if (r.course !== 'スタンダード車検') bf.insertAdjacentHTML('beforeend', `<tr><td class="font-bold text-orange-600">${r.arrivalDate}</td><td class="text-gray-400">${r.shakenDate}</td><td>${getCourseBadge(r.course)}</td><td>${r.ss}</td><td class="font-black">${r.name}</td><td class="memo-cell">${r.memo || "-"}</td><td class="text-gray-400 text-[10px]">${r.timestamp}</td><td><button onclick='editRes(${JSON.stringify(r)})' class="text-blue-500 text-xs">編集</button><button onclick="deleteRow(${r.rowId},'${r.name}')" class="text-red-500 text-xs ml-2">削除</button></td></tr>`); });
             });
         }
-        function checkAdmin(pw) { if (prompt("管理者PW") === pw) { showSection('admin-section'); fetchAdminData(); } }
+
+        async function editRes(r) {
+            const name = prompt("お客様名", r.name), model = prompt("車種", r.carModel), num = prompt("ナンバー", r.carNum), sd = prompt("車検日 (yyyy/MM/dd)", r.shakenDate), ad = prompt("入庫日 (yyyy/MM/dd)", r.arrivalDate), memo = prompt("備考", r.memo);
+            if (!name) return;
+            if (confirm("予約を更新し、通知メールを送信しますか？")) {
+                const data = { action:'update', rowId:r.rowId, name, carModel:model, carNum:num, shakenDate:sd, arrivalDate:ad, memo, ss:r.ss, course:r.course };
+                await fetch(GAS_URL, {method:"POST", body:JSON.stringify(data)});
+                alert("更新完了。通知を送りました。"); fetchAdminData();
+            }
+        }
+
         async function deleteRow(id, n) { if (confirm(`${n}様のデータを削除しますか？`)) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'delete', rowId:id})}); fetchAdminData(); } }
-        async function editRow(id, n) { const m = prompt(`${n}様の備考編集`, ""); if (m !== null) { await fetch(GAS_URL, {method:"POST", body:JSON.stringify({action:'edit', rowId:id, memo:m})}); fetchAdminData(); } }
     </script>
 </body>
 </html>
